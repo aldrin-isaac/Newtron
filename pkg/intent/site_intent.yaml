@@ -1,0 +1,26 @@
+# intent/site_intent.yaml
+# Chat Session: 20240706_1244_NewtronProject
+# Session Timestamp: 2025-07-06T14:35:00-07:00
+# Site-specific definitions, replacing NetconfSite.conf
+
+regions:
+  amer-wan:
+    sites:
+      ny:
+        route_reflectors: ["ny"]
+        site_ip: "69.184.16.192"
+      nj:
+        route_reflectors: ["nj"]
+        site_ip: "69.184.30.192"
+      downtown:
+        route_reflectors: ["ny", "nj"]
+        site_ip: "69.184.16.192"
+  emea-wan:
+    sites:
+      dockland:
+        route_reflectors: ["dockland"]
+        site_ip: "69.184.40.0"
+      slough:
+        route_reflectors: ["slough"]
+        site_ip: "69.184.66.0"
+

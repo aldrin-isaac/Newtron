@@ -1,0 +1,66 @@
+# intent/platform.yaml
+# Chat Session: newtron-20250706-01
+# Session Timestamp: 2025-07-06T15:24:00-07:00
+# Hardware and vendor-specific platform capabilities, now with added hardware details.
+
+vendors:
+  juniper:
+    chassis:
+      "MX960":
+        supported_versions: ["10.4R7.5", "11.4R4.4"]
+        current_version: "11.4R4.4"
+        vendor: "juniper"
+        config_class: "junos"
+        chassis_class: "MX"
+        queue_type: "8q"
+        node_type: "router"
+        l2_capable: true
+        drop_profiles: "4t"
+        schedulers: "8q4t"
+        cards:
+          # Example of a fully fleshed-out card definition
+          "MX960-4X10GE(LAN)-SFP+":
+            description: "4-Port TenGigabit Ethernet"
+            port_type: "te"
+            intf_proto: "ethernet"           # Added
+            intf_encaps: ["vlan", "eth"]     # Added
+            intf_symb: "xe"                  # Added
+            maximum_mtu: 9192                # Added
+            queue_type: "8q3t"               # Added
+            valid_ports: ["0-3"]
+            valid_speeds: ["10000"]
+            bridging: true
+          MX960-IRB:
+            description: "Integrated Routing and Bridging"
+            port_type: "irb"
+            intf_proto: "ethernet"
+            intf_encaps: ["vlan"]
+            intf_symb: "irb"
+            maximum_mtu: 9192
+            queue_type: "8q2t"
+            valid_subifs: ["1-4096"]
+          MX960-AE:
+            description: "256-Port Aggregated Ethernet"
+            port_type: "ae"
+            intf_proto: "ethernet"
+            intf_encaps: ["vlan", "eth"]
+            intf_symb: "ae"
+            maximum_mtu: 9192
+            queue_type: "8q2t"
+            bridging: true
+            valid_ports: ["0-255"]
+  arista:
+    chassis:
+      "DCS-7150S-64-CL-F":
+        vendor: "arista"
+        config_class: "eos"
+        node_type: "tor-switch"
+        cards: {} # Card definitions for Arista would go here
+        ae_profiles:
+          "7150s-access":
+            "100":
+              description: "UPLINK"
+              bridge_mode: "trunk"
+              trunk_type: "uplink"
+              designated_members: ["51/1", "52/1"]
+

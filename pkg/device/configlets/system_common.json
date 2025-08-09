@@ -1,0 +1,47 @@
+// File: pkg/device/system_commmon.json
+// Chat Session: newtron-20250706-01
+// Session Timestamp: 2025-07-06T15:24:00-07:00
+{
+  "openconfig-system:system": {
+    "config": {
+      "hostname": "placeholder-hostname",
+      "domain-name": "placeholder-domain.com",
+      "login-banner": "Welcome to the Newtron-managed device.",
+      "motd-banner": "This device is under automated management."
+    },
+    "aaa": {
+      "authentication": {
+        "config": {
+          "authentication-method": [
+            "openconfig-aaa:LOCAL",
+            "openconfig-aaa:RADIUS_ALL"
+          ]
+        }
+      }
+    },
+    "ntp": {
+      "config": {
+        "enabled": true
+      }
+    },
+    "ssh-server": {
+      "config": {
+        "enable": true,
+        "protocol-version": "V2",
+        "rate-limit": 5
+      }
+    },
+    "telnet-server": {
+      "config": {
+        "enable": true,
+        "rate-limit": 5
+      }
+    }
+  },
+  "openconfig-lldp:lldp": {
+    "config": {
+      "enabled": true
+    }
+  }
+}
+

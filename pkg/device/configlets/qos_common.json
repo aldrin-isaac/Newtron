@@ -1,0 +1,115 @@
+// File: pkg/device/qos_commmon.json
+// Chat Session: newtron-20250706-01
+// Session Timestamp: 2025-07-06T15:24:00-07:00
+{
+  "openconfig-qos:qos": {
+    "classifiers": {
+      "classifier": [
+        {
+          "name": "match-dscp",
+          "config": {
+            "name": "match-dscp",
+            "type": "IPV4"
+          },
+          "terms": {
+            "term": [
+              {
+                "id": "ef",
+                "conditions": {
+                  "ipv4": {
+                    "config": {
+                      "dscp": 46
+                    }
+                  }
+                },
+                "actions": {
+                  "config": {
+                    "target-group": "ef"
+                  }
+                }
+              },
+              {
+                "id": "be",
+                "conditions": {
+                  "ipv4": {
+                    "config": {
+                      "dscp": 0
+                    }
+                  }
+                },
+                "actions": {
+                  "config": {
+                    "target-group": "be"
+                  }
+                }
+              },
+              {
+                "id": "nc",
+                "conditions": {
+                  "ipv4": {
+                    "config": {
+                      "dscp": 56
+                    }
+                  }
+                },
+                "actions": {
+                  "config": {
+                    "target-group": "nc"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "forwarding-groups": {
+      "forwarding-group": [
+        {
+          "name": "ef",
+          "config": {
+            "name": "ef",
+            "output-queue": "2"
+          }
+        },
+        {
+          "name": "be",
+          "config": {
+            "name": "be",
+            "output-queue": "0"
+          }
+        },
+        {
+          "name": "nc",
+          "config": {
+            "name": "nc",
+            "output-queue": "3"
+          }
+        }
+      ]
+    },
+    "queues": {
+      "queue": [
+        {
+          "name": "ef",
+          "config": {
+            "name": "ef"
+          }
+        },
+        {
+          "name": "be",
+          "config": {
+            "name": "be"
+          }
+        },
+        {
+          "name": "nc",
+          "config": {
+            "name": "nc"
+          }
+        }
+      ]
+    }
+  }
+}
+

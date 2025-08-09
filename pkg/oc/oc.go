@@ -1,0 +1,3 @@
+// Package oc contains generated structs for OpenConfig models.
+//go:generate go run github.com/openconfig/ygot/generator@latest -path=../../yang/flat -output_file=pkg/oc/oc.go -package_name=oc -generate_fakeroot -fakeroot_name=Device -compress_paths=true -shorten_enum_leaf_names -typedef_enum_with_defmod ../../yang/flat/openconfig-interfaces.yang ../../yang/flat/openconfig-acl.yang ../../yang/flat/openconfig-network-instance.yang ../../yang/flat/openconfig-system.yang ../../yang/flat/openconfig-platform.yang ../../yang/flat/openconfig-if-aggregate.yang ../../yang/flat/openconfig-vlan.yang ../../yang/flat/openconfig-if-ip.yang ../../yang/flat/openconfig-if-ethernet.yang ../../yang/flat/openconfig-bgp.yang
+package oc

@@ -1,0 +1,159 @@
+# intent/network_intent.yaml
+# Chat Session: newtron-20250706-01
+# Session Timestamp: 2025-07-06T15:24:00-07:00
+# This version is updated with the complete firewall policy intent model.
+
+version: "1.0"
+
+lock_dir: "/bbnet/tmp"
+super_users: ["neteng"]
+
+reverse_exclude:
+  - "site-ip"
+  - "pe-asnum"
+  - "pe-asname"
+  - "PE-ASNAME"
+  - "ce-asnum"
+
+permission:
+  modlag: [neteng, netops]
+  addip: [neteng, netops]
+  delip: [neteng, netops]
+  modbridge: [neteng, netops]
+  modfilter: [neteng, netops]
+  modvpn: [neteng, netops]
+
+services:
+  xlo0:
+    description: "Core Loopback Address"
+    service_type: "core-lo0"
+    interface_policy:
+      rule_header: "copp"
+      junos:
+        in_name: "xlo0-v7-in"
+        in_rule: ["60010-vrrp-accept", "60020-bfd-accept"]
+  vce:
+    description: "VRF Routed Customer Edge"
+    service_type: "vrf-ce"
+    valid_ip: ["vce-wan"]
+    routing_behavior:
+      affinity: "pe-affinity"
+      max_routes: 1000
+      vrf_default_vpn: ["mgmt-spoke-global", "mgmt-spoke-aslocal"]
+    prefix_list_alias:
+      ce-ext: ["vce-ext"]
+      ce-wan: ["vce-wan"]
+    interface_policy:
+      rule_header: vce
+      all:
+        in_name: vce-v62-in
+        in_rule: [110-cebgp, 200-pecli, svcs-ce-in, oam-ce-in, discard-all]
+        out_name: vce-v62-out
+        out_rule: [111-cebgp, 201-pecli, svcs-ce-out, oam-ce-out, discard-all]
+
+# --- Added/Updated Policy Section ---
+
+policy_rule_lists:
+  svcs-ce-in: ["1316-https"]
+  svcs-ce-out: ["1317-https"]
+  oam-ce-in: ["1200-cli", "1210-snmp", "980-icmp"]
+  oam-ce-out: ["1201-cli", "1211-snmp", "980-icmp"]
+  discard-all: ["10000-all-discard"]
+
+policy_rules:
+  "100-vrrp":
+    application: "network-proto"
+    sequence: 100
+    match:
+      protocol: "vrrp"
+      destination_list: ["224.0.0.18/32"]
+    cos: "cs7"
+    policer: "network-control-5m"
+  "110-cebgp":
+    application: "network-proto"
+    sequence: 110
+    match:
+      protocol: "tcp"
+      source_port: 179
+      tcp_established: true
+      source_list: ["ce-wan"]
+      destination_list: ["ce-wan"]
+    cos: "cs7"
+  "980-icmp":
+    application: "icmp"
+    sequence: 980
+    match:
+      protocol: "icmp"
+      type: ["echo-reply", "unreachable", "echo-request", "time-exceeded"]
+    cos: "cs6"
+  "1200-cli":
+    application: "network-oam"
+    sequence: 1200
+    match:
+      protocol: "tcp"
+      tcp_established: true
+      source_port_range: [22]
+      destination_list: ["anm", "vnm"]
+    cos: "cs2"
+  "1316-https":
+    application: "generic-web"
+    sequence: 1316
+    match:
+      protocol: "tcp"
+      destination_port: 443
+    cos: "af12"
+  "10000-all-discard":
+    application: "discard-all"
+    sequence: 10000
+    match:
+      source_list: ["0.0.0.0/0"]
+    action: "discard"
+
+# --- End Policy Section ---
+
+vlans:
+  1:
+    description: "default vlan"
+    type: "shared"
+    prefix_list: ["default"]
+  100:
+    description: "WAN POP - Transit LAN 1"
+    type: "shared"
+    prefix_list: ["172.17.0.0/16"]
+
+regions:
+  amer-wan:
+    pe_as_num: 13908
+    pe_as_name: "amer"
+    ip_mtu_transit: 1512
+    generic_alias:
+      pe-asnum: "{{.PeAsNum}}"
+      pe-asname: "{{.PeAsName}}"
+    prefix_lists:
+      vce-wan: ["185.22.0.0/19", "18.16.0.0/12"]
+    management:
+      radius_servers: ["east-nm1", "west-nm1"]
+    bridge:
+      domains:
+        front-end:
+          baseline_vlans: ["1001-1010"]
+          vlans:
+            1001:
+              description: "WAN Front End 1 (Regional)"
+              type: "dedicated"
+              prefix_list: ["208.134.161.128/26"]
+
+generic_alias:
+  "13908": "amer-asnum"
+
+communities:
+  "65100:509": "east"
+  "ce-asnum:1": "Mgmt_Hub_Global"
+  "pe-asnum:1": "Mgmt_Hub_{{.PeAsName}}"
+
+vpns:
+  mgmt-spoke-global:
+    description: "Global Management Spoke"
+    import_target: "ce-asnum:1"
+    export_target: "ce-asnum:2"
+

@@ -1,0 +1,70 @@
+// File: pkg/device/routing_commmon.json
+// Chat Session: newtron-20250706-01
+// Session Timestamp: 2025-07-06T15:24:00-07:00
+{
+  "openconfig-routing-policy:routing-policy": {
+    "policy-definitions": {
+      "policy-definition": [
+        {
+          "name": "next-hop-self",
+          "config": {
+            "name": "next-hop-self"
+          },
+          "statements": {
+            "statement": [
+              {
+                "name": "set-self",
+                "actions": {
+                  "bgp-actions": {
+                    "config": {
+                      "set-next-hop": "SELF"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "openconfig-network-instance:network-instances": {
+    "network-instance": [
+      {
+        "name": "default",
+        "protocols": {
+          "protocol": [
+            {
+              "identifier": "OSPF",
+              "name": "2",
+              "ospfv2": {
+                "global": {
+                  "config": {}
+                },
+                "areas": {
+                  "area": [
+                    {
+                      "identifier": "0.0.0.0",
+                      "interfaces": {
+                        "interface": [
+                          {
+                            "id": "lo0.0",
+                            "config": {
+                              "id": "lo0.0",
+                              "passive": true
+                            }
+                          }
+                        ]
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}
+

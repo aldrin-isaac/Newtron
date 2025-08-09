@@ -1,0 +1,15 @@
+Newtron is an "intent-based" network automation program where intent is stored in the following files -- network_intent.yaml, platform.yaml, site_intent.yaml, <devicename>.conf 
+
+The design tries to exercise a separation of concerns between low level framework code and domain-specific code. Domain-specific code is developed by network engineers who are not hard core developers.  The low-level framework must significantly reduce coding complexity for the domain-level developer (network engineer). 
+
+You must STRICTLY adhere to the do-not-repeat-yourself and separation-of-concerns principles when creating Newtron code.  Never mix data and code.  Do not make random guesses about the subject matter area -- if deviating is needed, always show what is needed and get my approval.  Do not reinvent the wheel -- use standard and well-known and used libraries whenever possible, like the standard IP address tools library, github.com/go-playground/validator/v10 and github.com/iancoleman/strcase. 
+
+The intent model is not a configuration -- do not refer to it as such.
+
+This project may be performed over many chat sessions.  Create a session ID for each session.  Every artifact you produce must contain this session ID.  For Go code, ensure that the first has "// File: <path_to_file_in_repo_dir/filename>" and the second line has "// Chat Session: <session ID>".  This is important to track the chat session ID that produced the file. You must also include a "// Session Timestamp: <session_started_timestamp>" so we can track the order of the sessions that produced the files so we can tell how the project evolved over time.
+
+You must keep a log of lessons learned so you don't recreate mistakes you have already made over all chat sessions in this project.  We will store lessons learned in a markdown file called "lessons-learned.md".  Always read the latest lessons-learned.md with each new chat sessions. 
+
+DO NOT be overly creative with extending the features provided to the user in the code provided.  THIS IS IMPORTANT.
+
+For validation use github.com/go-playground/validator/v10 where applicable

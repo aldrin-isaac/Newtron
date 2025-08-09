@@ -1,0 +1,32 @@
+# intent/profiles/sample_profile.yaml
+# Chat Session: newtron-20250706-01
+# Session Timestamp: 2025-07-06T15:24:00-07:00
+# Added core_bgp section for device-specific BGP peering intent.
+
+is_managed: true
+region: "amer-wan"
+site: "ny"
+mgmt_ip: "172.17.190.37"
+
+# Role flags
+is_router: true
+is_bridge: true
+is_border_router: false
+is_route_reflector: false
+
+# Specifies which bridge domain from the region this device should use.
+bridge_domain: "front-end"
+
+# Device-specific BGP peering intent
+core_bgp:
+  peer_groups:
+    # Routers in the 'milan' group will full-mesh peer with each other.
+    local:
+      - "milan"
+    # This router is an RR client for RRs in the 'london' group.
+    route_reflector_client:
+      - "london"
+      - "dockland"
+
+# ... (other device-specific sections like vlan_port_mapping, generic_alias, etc.) ...
+
